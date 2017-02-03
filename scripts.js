@@ -65,7 +65,7 @@ function Bullet(x, y) {
     this.y = y;
     
     // Set Speed & Get Random Color //
-    var speed = 3,
+    var speed = rand(3, 5),
         bulletcolor = ['red', 'white', 'yellow', 'blue', 'green', 'purple'],
         colorused = bulletcolor[rand(0, 5)];
     // Show Bullet //
@@ -96,7 +96,7 @@ function setCanvasWidth() {
 // Paint Over Canvas For Animation Illusion //
 function paintover() {
     'use strict';
-    ctx.fillStyle = "rgba(0, 0, 0, 1)";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     window.requestAnimationFrame(paintover);
 }
