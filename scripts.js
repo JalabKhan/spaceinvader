@@ -17,6 +17,8 @@ function Ship(x, y) {
     this.x = x;
     this.y = y;
     
+    var movmentspeed = 0.8;
+    
     // Show Ship //
     this.showpi = function () {
         // Shade Of Red //
@@ -28,47 +30,56 @@ function Ship(x, y) {
     };
     // Move Left //
     this.moveleft = function () {
-        this.x = x + 5;
-        x = x + 5;
-        
+        this.x = x + movmentspeed;
+        x = x + movmentspeed;
+        if (x < 30) {
+            x = 30;
+        } else if (x > (canvas.width - 40)) {
+            x = canvas.width - 40;
+        }
     };
 
     // Move Right //
     this.moveright = function () {
-        this.x = x - 5;
-        x = x - 5;
+        this.x = x - movmentspeed;
+        x = x - movmentspeed;
+        if (x < 30) {
+            x = 30;
+        } else if (x > (canvas.width - 40)) {
+            x = canvas.width - 40;
+        }
     };
 
 }
 // Variables //
-var dropi = [],
-    soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
+var bullets = [],
     ship = new Ship(window.innerWidth / 2, window.innerHeight - 30);
 
 
-// Create Drop //
-function Drop(x, y) {
+// Create Bullet //
+function Bullet(x, y) {
     'use strict';
     
     // Set X and Y Position //
     this.x = x;
     this.y = y;
     
-    // Set Speed //
-    var speed = 3;
-    
-    // Show Drop //
+    // Set Speed & Get Random Color //
+    var speed = 3,
+        bulletcolor = ['red', 'white', 'yellow', 'blue', 'green', 'purple'],
+        colorused = bulletcolor[rand(0, 5)];
+    // Show Bullet //
     this.showpi = function () {
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = colorused;
         ctx.fillRect(x, y - 40, 20, 20);
     };
     
-    // Move Drop //
+    // Move Bullet //
     this.movepi = function () {
         y = y - speed;
     };
     
-    // Erase Drop //
+    // Erase Bullet //
     this.erasepi = function () {
         return (y - speed);
     };
@@ -90,29 +101,26 @@ function paintover() {
     window.requestAnimationFrame(paintover);
 }
 
-// Get New Drops //
-var drop = new Drop(window.innerWidth / 2, window.innerHeight - 40);
-
-// Erase Drop //
-function erasedrop() {
+// Erase Bullet //
+function erasebullet() {
     'use strict';
-    if (dropi.length > 0) {
-        if (dropi[0].erasepi() < 0) {
-            dropi.shift();
+    if (bullets.length > 0) {
+        if (bullets[0].erasepi() < 0) {
+            bullets.shift();
         }
     }
-    window.requestAnimationFrame(erasedrop);
+    window.requestAnimationFrame(erasebullet);
 }
 
-// Draw Drop //
-function drawdrop() {
+// Draw Bullet //
+function drawbullet() {
     'use strict';
     var i;
-    for (i = 0; i < dropi.length; i = i + 1) {
-        dropi[i].showpi();
-        dropi[i].movepi();
+    for (i = 0; i < bullets.length; i = i + 1) {
+        bullets[i].showpi();
+        bullets[i].movepi();
     }
-    window.requestAnimationFrame(drawdrop);
+    window.requestAnimationFrame(drawbullet);
 }
 
 // Draw Ship //
@@ -121,31 +129,107 @@ function drawship() {
     ship.showpi();
     window.requestAnimationFrame(drawship);
 }
+// Booleans Vars Arrays For KeyEvents //
+var space1 = false,
+    left1 = false,
+    right1 = false,
+    pressedKeys = [],
+    li;
 
-// Listen For Key Press //
-window.addEventListener('keydown', function pressed(x) {
+// Listen For KeyDown //
+function pressed(x) {
 	'use strict';
 	var code = x.keyCode,
-        soundfile = new Audio('http://www.downloadfreesound.com/wp-content/uploads/2014/07/Beep4.mp3'),
+        spacebar = 32,
         moveleft = 39,
-        moveright = 37;
-	if (code === 32) {
+        moveright = 37,
+        i,
+        soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
+        pressedKeys = [],
+        li;
+    li = pressedKeys[x.keyCode];
+    if (!li) {
+        if (code === spacebar) {
+            space1 = true;
+        }
+        if (code === moveright) {
+            right1 = true;
+        }
+        if (code === moveleft) {
+            left1 = true;
+        }
+    }
+    function firenow() {
         soundfile.play();
-        dropi.push(new Drop(ship.x, window.innerHeight));
-        if (dropi.length === 1) {
+        bullets.push(new Bullet(ship.x, window.innerHeight));
+        if (bullets.length === 1) {
             // Execute Only Once //
             if (change !== 1) {
-                drawdrop();
-                erasedrop();
+                drawbullet();
+                erasebullet();
                 change = 1;
             }
         }
-    } else if (code === moveright) {
-        ship.moveright();
-    } else if (code === moveleft) {
-        ship.moveleft();
     }
-});
+// Multiple KeyPress Detection //
+    function goright() {
+        ship.moveright();
+        if (right1) {
+            window.requestAnimationFrame(goright);
+        }
+        return;
+    }
+    function goleft() {
+        ship.moveleft();
+        if (left1) {
+            window.requestAnimationFrame(goleft);
+        }
+        return;
+    }
+    if (space1) {
+        if (right1) {
+            firenow();
+            goright();
+        } else if (left1) {
+            firenow();
+            goleft();
+        } else {
+            firenow();
+        }
+    }
+    if (right1) {
+        goright();
+    }
+    if (left1) {
+        goleft();
+    }
+}
+
+// Listen for KeyUp //
+function unpressed(x) {
+    'use strict';
+    var li = pressedKeys[x.keyCode],
+        code = x.keyCode,
+        spacebar = 32,
+        moveleft = 39,
+        moveright = 37;
+    if (!li) {
+        if (code === spacebar) {
+            space1 = false;
+        }
+        if (code === moveright) {
+            right1 = false;
+        }
+        if (code === moveleft) {
+            left1 = false;
+        }
+    }
+    
+}
+
+// Detect KeyPress Events & Pass To Associated Functions //
+window.onkeydown = pressed;
+window.onkeyup = unpressed;
 
 // Animate Canvas //
 setCanvasWidth();
