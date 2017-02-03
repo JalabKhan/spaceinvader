@@ -17,6 +17,9 @@ function Ship(x, y) {
     this.x = x;
     this.y = y;
     
+    // Movement Variable //
+    var movementvar = 10;
+    
     // Show Ship //
     this.showpi = function () {
         // Shade Of Red //
@@ -28,15 +31,15 @@ function Ship(x, y) {
     };
     // Move Left //
     this.moveleft = function () {
-        this.x = x + 5;
-        x = x + 5;
+        this.x = x + movementvar;
+        x = x + movementvar;
         
     };
 
     // Move Right //
     this.moveright = function () {
-        this.x = x - 5;
-        x = x - 5;
+        this.x = x - movementvar;
+        x = x - movementvar;
     };
 
 }
@@ -126,7 +129,6 @@ function drawship() {
 window.addEventListener('keydown', function pressed(x) {
 	'use strict';
 	var code = x.keyCode,
-        soundfile = new Audio('http://www.downloadfreesound.com/wp-content/uploads/2014/07/Beep4.mp3'),
         moveleft = 39,
         moveright = 37;
 	if (code === 32) {
@@ -146,6 +148,7 @@ window.addEventListener('keydown', function pressed(x) {
         ship.moveleft();
     }
 });
+
 
 // Animate Canvas //
 setCanvasWidth();
