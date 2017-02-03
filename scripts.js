@@ -3,22 +3,17 @@ function rand(min, max) {
     "use strict";
     return Math.floor((Math.random() * max) + min);
 }
-
 // Setup Canvas //
 var canvas = document.querySelector("#make"),
     ctx = canvas.getContext("2d"),
     change;
-
 // Create Ship //
 function Ship(x, y) {
     'use strict';
-    
     // Set X and Y Position //
     this.x = x;
     this.y = y;
-    
     var movmentspeed = 0.8;
-    
     // Show Ship //
     this.showpi = function () {
         // Shade Of Red //
@@ -38,7 +33,6 @@ function Ship(x, y) {
             x = canvas.width - 40;
         }
     };
-
     // Move Right //
     this.moveright = function () {
         this.x = x - movmentspeed;
@@ -49,21 +43,16 @@ function Ship(x, y) {
             x = canvas.width - 40;
         }
     };
-
 }
 // Variables //
 var bullets = [],
     ship = new Ship(window.innerWidth / 2, window.innerHeight - 30);
-
-
 // Create Bullet //
 function Bullet(x, y) {
     'use strict';
-    
     // Set X and Y Position //
     this.x = x;
     this.y = y;
-    
     // Set Speed & Get Random Color //
     var speed = rand(3, 5),
         bulletcolor = ['red', 'white', 'yellow', 'blue', 'green', 'purple'],
@@ -73,26 +62,21 @@ function Bullet(x, y) {
         ctx.fillStyle = colorused;
         ctx.fillRect(x, y - 40, 20, 20);
     };
-    
     // Move Bullet //
     this.movepi = function () {
         y = y - speed;
     };
-    
     // Erase Bullet //
     this.erasepi = function () {
         return (y - speed);
     };
 }
-
-
 // Setup Canvas Size //
 function setCanvasWidth() {
     "use strict";
     ctx.canvas.width = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
 }
-
 // Paint Over Canvas For Animation Illusion //
 function paintover() {
     'use strict';
@@ -100,7 +84,6 @@ function paintover() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     window.requestAnimationFrame(paintover);
 }
-
 // Erase Bullet //
 function erasebullet() {
     'use strict';
@@ -111,7 +94,6 @@ function erasebullet() {
     }
     window.requestAnimationFrame(erasebullet);
 }
-
 // Draw Bullet //
 function drawbullet() {
     'use strict';
@@ -122,7 +104,6 @@ function drawbullet() {
     }
     window.requestAnimationFrame(drawbullet);
 }
-
 // Draw Ship //
 function drawship() {
     'use strict';
@@ -135,7 +116,6 @@ var space1 = false,
     right1 = false,
     pressedKeys = [],
     li;
-
 // Listen For KeyDown //
 function pressed(x) {
 	'use strict';
@@ -171,7 +151,7 @@ function pressed(x) {
             }
         }
     }
-// Multiple KeyPress Detection //
+    // Multiple KeyPress Detection //
     function goright() {
         ship.moveright();
         if (right1) {
@@ -204,7 +184,6 @@ function pressed(x) {
         goleft();
     }
 }
-
 // Listen for KeyUp //
 function unpressed(x) {
     'use strict';
@@ -224,13 +203,10 @@ function unpressed(x) {
             left1 = false;
         }
     }
-    
 }
-
 // Detect KeyPress Events & Pass To Associated Functions //
 window.onkeydown = pressed;
 window.onkeyup = unpressed;
-
 // Animate Canvas //
 setCanvasWidth();
 paintover();
