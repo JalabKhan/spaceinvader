@@ -17,7 +17,7 @@ function Invader(x, y) {
     // Show Invader //
     this.showpi = function () {
         ctx.fillStyle = 'white';
-        ctx.fillRect(x, y - 40, 60, 60);
+        ctx.fillRect(x, y, 40, 40);
     };
     // Erase Invader On Collesion //
     this.erasepi = function () {
@@ -83,7 +83,7 @@ function Ship(x, y) {
 }
 // Variables //
 var bullets = [],
-    invaders = new Invader(20, 60),
+    invaders = [],
     ship = new Ship(window.innerWidth / 2, window.innerHeight - 30);
 // Create Bullet //
 function Bullet(x, y) {
@@ -92,16 +92,18 @@ function Bullet(x, y) {
     this.x = x;
     this.y = y;
     // Set Speed & Get Random Color //
-    var speed = rand(3, 5),
-        bulletcolor = ['red', 'white', 'yellow', 'blue', 'green', 'purple'],
-        colorused = bulletcolor[rand(0, 5)];
+    var speed = 4.5,
+        bulletcolor = ['red', 'yellow', 'blue', 'green', 'purple'],
+        colorused = bulletcolor[rand(0, 4)];
     // Show Bullet //
     this.showpi = function () {
+        // Center Bullet//
         ctx.fillStyle = colorused;
-        ctx.fillRect(x, y - 40, 20, 20);
+        ctx.fillRect(x + 7.5, y - 40, 5, 5);
     };
     // Move Bullet //
     this.movepi = function () {
+        this.y = y - speed;
         y = y - speed;
     };
     // Erase Bullet //
@@ -145,11 +147,35 @@ function drawbullet() {
 // Draw Invader //
 function drawinvader() {
     'use strict';
-    invaders.showpi();
-    if (invaders.clash) {
-        return;
+    var x = 20,
+        y = 20,
+        i = 0;
+    for (i = 0; i < 5; i = i + 1) {
+        invaders.push(new Invader(x, y));
+        invaders[i].showpi();
+        x = x + 60;
     }
+    for (i = 0; i < 5; i = i + 1) {
+        if (invaders[i].clash) {
+            invaders.splice(i, 1);
+        }
+    }
+
     window.requestAnimationFrame(drawinvader);
+}
+// Detect Collision //
+function detect() {
+    'use strict';
+    var i;
+    for (i = 0; i < bullets.length; i = i + 1) {
+        if (bullets[i].y < (invaders[i].y + 80)) {
+            if ((bullets[i].x > invaders[i].x) && bullets[i].x < (invaders[i].x + 40)) {
+                invaders[i].erasepi();
+                bullets.splice(i, 1);
+            }
+        }
+    }
+    window.requestAnimationFrame(detect);
 }
 // Draw Ship //
 function drawship() {
@@ -297,3 +323,5 @@ window.onkeyup = unpressed;
 setCanvasWidth();
 paintover();
 drawship();
+drawinvader();
+detect();
