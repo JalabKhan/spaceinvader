@@ -7,6 +7,18 @@ function rand(min, max) {
 var canvas = document.querySelector("#make"),
     ctx = canvas.getContext("2d"),
     change;
+// Create Invader //
+/*function Invader(x, y) {
+    'use strict';
+    // Set X and Y Position //
+    this.x = x;
+    this.y = y;
+    // Show Invader //
+    this.showpi = function () {
+        ctx.fillStyle = colorused;
+        ctx.fillRect(x, y - 40, 60, 60);
+    };
+}*/
 // Create Ship //
 function Ship(x, y) {
     'use strict';
@@ -41,6 +53,26 @@ function Ship(x, y) {
             x = 30;
         } else if (x > (canvas.width - 40)) {
             x = canvas.width - 40;
+        }
+    };
+    // Move Up //
+    this.moveup = function () {
+        this.y = y - movmentspeed;
+        y = y - movmentspeed;
+        if (y < 30) {
+            y = 30;
+        } else if (y > (canvas.height - 40)) {
+            y = canvas.height - 40;
+        }
+    };
+    // Move Down //
+    this.movedown = function () {
+        this.y = y + movmentspeed;
+        y = y + movmentspeed;
+        if (y < 30) {
+            y = 30;
+        } else if (y > (canvas.height - 40)) {
+            y = canvas.height - 40;
         }
     };
 }
@@ -114,6 +146,8 @@ function drawship() {
 var space1 = false,
     left1 = false,
     right1 = false,
+    up1 = false,
+    down1 = false,
     pressedKeys = [],
     li;
 // Listen For KeyDown //
@@ -123,6 +157,8 @@ function pressed(x) {
         spacebar = 32,
         moveleft = 39,
         moveright = 37,
+        moveup = 38,
+        movedown = 40,
         i,
         soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
         pressedKeys = [],
@@ -138,10 +174,16 @@ function pressed(x) {
         if (code === moveleft) {
             left1 = true;
         }
+        if (code === moveup) {
+            up1 = true;
+        }
+        if (code === movedown) {
+            down1 = true;
+        }
     }
     function firenow() {
         soundfile.play();
-        bullets.push(new Bullet(ship.x, window.innerHeight));
+        bullets.push(new Bullet(ship.x, ship.y));
         if (bullets.length === 1) {
             // Execute Only Once //
             if (change !== 1) {
@@ -166,6 +208,20 @@ function pressed(x) {
         }
         return;
     }
+    function goup() {
+        ship.moveup();
+        if (up1) {
+            window.requestAnimationFrame(goup);
+        }
+        return;
+    }
+    function godown() {
+        ship.movedown();
+        if (down1) {
+            window.requestAnimationFrame(godown);
+        }
+        return;
+    }
     if (space1) {
         if (right1) {
             firenow();
@@ -183,6 +239,12 @@ function pressed(x) {
     if (left1) {
         goleft();
     }
+    if (up1) {
+        goup();
+    }
+    if (down1) {
+        godown();
+    }
 }
 // Listen for KeyUp //
 function unpressed(x) {
@@ -191,7 +253,9 @@ function unpressed(x) {
         code = x.keyCode,
         spacebar = 32,
         moveleft = 39,
-        moveright = 37;
+        moveright = 37,
+        moveup = 38,
+        movedown = 40;
     if (!li) {
         if (code === spacebar) {
             space1 = false;
@@ -201,6 +265,12 @@ function unpressed(x) {
         }
         if (code === moveleft) {
             left1 = false;
+        }
+        if (code === moveup) {
+            up1 = false;
+        }
+        if (code === movedown) {
+            down1 = false;
         }
     }
 }
