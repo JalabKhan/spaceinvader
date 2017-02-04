@@ -8,17 +8,22 @@ var canvas = document.querySelector("#make"),
     ctx = canvas.getContext("2d"),
     change;
 // Create Invader //
-/*function Invader(x, y) {
+function Invader(x, y) {
     'use strict';
     // Set X and Y Position //
     this.x = x;
     this.y = y;
+    this.clash = false;
     // Show Invader //
     this.showpi = function () {
-        ctx.fillStyle = colorused;
+        ctx.fillStyle = 'white';
         ctx.fillRect(x, y - 40, 60, 60);
     };
-}*/
+    // Erase Invader On Collesion //
+    this.erasepi = function () {
+        this.clash = true;
+    };
+}
 // Create Ship //
 function Ship(x, y) {
     'use strict';
@@ -78,6 +83,7 @@ function Ship(x, y) {
 }
 // Variables //
 var bullets = [],
+    invaders = new Invader(20, 60),
     ship = new Ship(window.innerWidth / 2, window.innerHeight - 30);
 // Create Bullet //
 function Bullet(x, y) {
@@ -136,12 +142,22 @@ function drawbullet() {
     }
     window.requestAnimationFrame(drawbullet);
 }
+// Draw Invader //
+function drawinvader() {
+    'use strict';
+    invaders.showpi();
+    if (invaders.clash) {
+        return;
+    }
+    window.requestAnimationFrame(drawinvader);
+}
 // Draw Ship //
 function drawship() {
     'use strict';
     ship.showpi();
     window.requestAnimationFrame(drawship);
 }
+
 // Booleans Vars Arrays For KeyEvents //
 var space1 = false,
     left1 = false,
