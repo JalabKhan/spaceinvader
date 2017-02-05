@@ -147,31 +147,36 @@ function drawbullet() {
 // Draw Invader //
 function drawinvader() {
     'use strict';
-    var x = 20,
-        y = 20,
-        i = 0;
-    for (i = 0; i < 5; i = i + 1) {
-        invaders.push(new Invader(x, y));
+    var i;
+    for (i = 0; i < invaders.length; i = i + 1) {
         invaders[i].showpi();
-        x = x + 60;
     }
-    for (i = 0; i < 5; i = i + 1) {
-        if (invaders[i].clash) {
-            invaders.splice(i, 1);
-        }
-    }
-
     window.requestAnimationFrame(drawinvader);
 }
+function makeinvader() {
+    'use strict';
+    var x = 20,
+        y = 20,
+        i;
+    for (i = 0; i < 5; i = i + 1) {
+        invaders.push(new Invader(x, y));
+        x = x + 60;
+    }
+}
 // Detect Collision //
+var r = 0;
 function detect() {
     'use strict';
-    var i;
+    var i,
+        e;
     for (i = 0; i < bullets.length; i = i + 1) {
-        if (bullets[i].y < (invaders[i].y + 80)) {
-            if ((bullets[i].x > invaders[i].x) && bullets[i].x < (invaders[i].x + 40)) {
-                invaders[i].erasepi();
-                bullets.splice(i, 1);
+        for (e = 0; e < invaders.length; e = e + 1) {
+            if (bullets[i].y < (invaders[e].y + 80)) {
+                if ((bullets[i].x > (invaders[e].x - 10)) && bullets[i].x < (invaders[e].x + 30)) {
+                    bullets.splice(i, 1);
+                    invaders.splice(e, 1);
+                    break;
+                }
             }
         }
     }
@@ -226,6 +231,7 @@ function pressed(x) {
     function firenow() {
         soundfile.play();
         bullets.push(new Bullet(ship.x, ship.y));
+        detect();
         if (bullets.length === 1) {
             // Execute Only Once //
             if (change !== 1) {
@@ -323,5 +329,6 @@ window.onkeyup = unpressed;
 setCanvasWidth();
 paintover();
 drawship();
+makeinvader();
 drawinvader();
 detect();
