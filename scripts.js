@@ -153,6 +153,7 @@ function drawinvader() {
     }
     window.requestAnimationFrame(drawinvader);
 }
+// Add Invader In Array //
 function makeinvader() {
     'use strict';
     var x = 20,
@@ -188,7 +189,6 @@ function drawship() {
     ship.showpi();
     window.requestAnimationFrame(drawship);
 }
-
 // Booleans Vars Arrays For KeyEvents //
 var space1 = false,
     left1 = false,
@@ -231,12 +231,12 @@ function pressed(x) {
     function firenow() {
         soundfile.play();
         bullets.push(new Bullet(ship.x, ship.y));
-        detect();
         if (bullets.length === 1) {
             // Execute Only Once //
             if (change !== 1) {
                 drawbullet();
                 erasebullet();
+                detect();
                 change = 1;
             }
         }
@@ -331,4 +331,3 @@ paintover();
 drawship();
 makeinvader();
 drawinvader();
-detect();
