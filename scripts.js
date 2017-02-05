@@ -19,9 +19,10 @@ function Invader(x, y) {
         ctx.fillStyle = 'white';
         ctx.fillRect(x, y, 40, 40);
     };
-    // Erase Invader On Collesion //
-    this.erasepi = function () {
-        this.clash = true;
+    // Move Invader //
+    this.movepi = function () {
+        this.y = y + 30;
+        y = y + 30;
     };
 }
 // Create Ship //
@@ -156,16 +157,25 @@ function drawinvader() {
 // Add Invader In Array //
 function makeinvader() {
     'use strict';
-    var x = 20,
+    var x = 35,
         y = 20,
         i;
-    for (i = 0; i < 5; i = i + 1) {
+    for (i = 0; i < 22; i = i + 1) {
         invaders.push(new Invader(x, y));
+        x = x + 60;
+    }
+    x = 35;
+    for (i = 0; i < 22; i = i + 1) {
+        invaders.push(new Invader(x, y + 60));
+        x = x + 60;
+    }
+    x = 35;
+    for (i = 0; i < 22; i = i + 1) {
+        invaders.push(new Invader(x, y + 120));
         x = x + 60;
     }
 }
 // Detect Collision //
-var r = 0;
 function detect() {
     'use strict';
     var i,
@@ -182,6 +192,14 @@ function detect() {
         }
     }
     window.requestAnimationFrame(detect);
+}
+// Move Invaders //
+function moveinvader() {
+    'use strict';
+    var u;
+    for (u = 0; u < invaders.length; u = u + 1) {
+        invaders[u].movepi();
+    }
 }
 // Draw Ship //
 function drawship() {
@@ -330,4 +348,5 @@ setCanvasWidth();
 paintover();
 drawship();
 makeinvader();
+setInterval(moveinvader, 4000);
 drawinvader();
