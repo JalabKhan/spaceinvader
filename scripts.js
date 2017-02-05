@@ -1,12 +1,21 @@
+////  Author: Jalab Khan  ////
+// Setup Canvas, Variable, Booleans, Arrays //
+var canvas = document.querySelector("#make"),
+    ctx = canvas.getContext("2d"),
+    change,
+    space1 = false,
+    left1 = false,
+    right1 = false,
+    up1 = false,
+    down1 = false,
+    pressedKeys = [],
+    li,
+    score = 0;
 // Get Random //
 function rand(min, max) {
     "use strict";
     return Math.floor((Math.random() * max) + min);
 }
-// Setup Canvas //
-var canvas = document.querySelector("#make"),
-    ctx = canvas.getContext("2d"),
-    change;
 // Create Invader //
 function Invader(x, y) {
     'use strict';
@@ -82,10 +91,10 @@ function Ship(x, y) {
         }
     };
 }
-// Variables //
+// Variables and Arrays for Objects //
 var bullets = [],
     invaders = [],
-    ship = new Ship(window.innerWidth / 2, window.innerHeight - 30);
+    ship = new Ship(800 / 2, 700 - 30);
 // Create Bullet //
 function Bullet(x, y) {
     'use strict';
@@ -115,8 +124,8 @@ function Bullet(x, y) {
 // Setup Canvas Size //
 function setCanvasWidth() {
     "use strict";
-    ctx.canvas.width = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
+    ctx.canvas.width = 800;
+    ctx.canvas.height = 700;
 }
 // Paint Over Canvas For Animation Illusion //
 function paintover() {
@@ -157,23 +166,43 @@ function drawinvader() {
 // Add Invader In Array //
 function makeinvader() {
     'use strict';
-    var x = 35,
+    var x = 20,
         y = 20,
         i;
-    for (i = 0; i < 22; i = i + 1) {
+    for (i = 0; i < 13; i = i + 1) {
         invaders.push(new Invader(x, y));
         x = x + 60;
     }
-    x = 35;
-    for (i = 0; i < 22; i = i + 1) {
+    x = 20;
+    for (i = 0; i < 13; i = i + 1) {
         invaders.push(new Invader(x, y + 60));
         x = x + 60;
     }
-    x = 35;
-    for (i = 0; i < 22; i = i + 1) {
+    x = 20;
+    for (i = 0; i < 13; i = i + 1) {
         invaders.push(new Invader(x, y + 120));
         x = x + 60;
     }
+    x = 20;
+    for (i = 0; i < 13; i = i + 1) {
+        invaders.push(new Invader(x, y + 180));
+        x = x + 60;
+    }
+    x = 20;
+    for (i = 0; i < 13; i = i + 1) {
+        invaders.push(new Invader(x, y + 240));
+        x = x + 60;
+    }
+    x = 20;
+    for (i = 0; i < 13; i = i + 1) {
+        invaders.push(new Invader(x, y + 300));
+        x = x + 60;
+    }
+}
+// Update Score //
+function updatescore() {
+    'use strict';
+    document.getElementById('score').innerHTML = 'Score:' + score;
 }
 // Detect Collision //
 function detect() {
@@ -186,6 +215,8 @@ function detect() {
                 if ((bullets[i].x > (invaders[e].x - 10)) && bullets[i].x < (invaders[e].x + 30)) {
                     bullets.splice(i, 1);
                     invaders.splice(e, 1);
+                    score = score + 1;
+                    updatescore();
                     break;
                 }
             }
@@ -207,14 +238,6 @@ function drawship() {
     ship.showpi();
     window.requestAnimationFrame(drawship);
 }
-// Booleans Vars Arrays For KeyEvents //
-var space1 = false,
-    left1 = false,
-    right1 = false,
-    up1 = false,
-    down1 = false,
-    pressedKeys = [],
-    li;
 // Listen For KeyDown //
 function pressed(x) {
 	'use strict';
@@ -225,9 +248,7 @@ function pressed(x) {
         moveup = 38,
         movedown = 40,
         i,
-        soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
-        pressedKeys = [],
-        li;
+        soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3');
     li = pressedKeys[x.keyCode];
     if (!li) {
         if (code === spacebar) {
@@ -343,10 +364,10 @@ function unpressed(x) {
 // Detect KeyPress Events & Pass To Associated Functions //
 window.onkeydown = pressed;
 window.onkeyup = unpressed;
-// Animate Canvas //
+// Call Functions //
 setCanvasWidth();
 paintover();
 drawship();
 makeinvader();
-setInterval(moveinvader, 4000);
+//setInterval(moveinvader, 4000);
 drawinvader();
