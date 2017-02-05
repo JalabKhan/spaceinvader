@@ -1,4 +1,4 @@
-////  Author: Jalab Khan  ////
+////  Author: JALAB KHAN  ////
 // Setup Canvas, Variable, Booleans, Arrays //
 var canvas = document.querySelector("#make"),
     ctx = canvas.getContext("2d"),
@@ -10,7 +10,8 @@ var canvas = document.querySelector("#make"),
     down1 = false,
     pressedKeys = [],
     li,
-    score = 0;
+    score = 0,
+    shiphit = false;
 // Get Random //
 function rand(min, max) {
     "use strict";
@@ -94,7 +95,7 @@ function Ship(x, y) {
 // Variables and Arrays for Objects //
 var bullets = [],
     invaders = [],
-    ship = new Ship(800 / 2, 700 - 30);
+    ship = new Ship(800 / 2, 500);
 // Create Bullet //
 function Bullet(x, y) {
     'use strict';
@@ -138,7 +139,7 @@ function paintover() {
 function erasebullet() {
     'use strict';
     if (bullets.length > 0) {
-        if (bullets[0].erasepi() < 0) {
+        if (bullets[0].erasepi() < 40) {
             bullets.shift();
         }
     }
@@ -167,42 +168,44 @@ function drawinvader() {
 function makeinvader() {
     'use strict';
     var x = 20,
-        y = 20,
+        y = (10 - 380),
         i;
-    for (i = 0; i < 13; i = i + 1) {
+    for (i = 0; i < 78; i = i + 1) {
         invaders.push(new Invader(x, y));
         x = x + 60;
-    }
-    x = 20;
-    for (i = 0; i < 13; i = i + 1) {
-        invaders.push(new Invader(x, y + 60));
-        x = x + 60;
-    }
-    x = 20;
-    for (i = 0; i < 13; i = i + 1) {
-        invaders.push(new Invader(x, y + 120));
-        x = x + 60;
-    }
-    x = 20;
-    for (i = 0; i < 13; i = i + 1) {
-        invaders.push(new Invader(x, y + 180));
-        x = x + 60;
-    }
-    x = 20;
-    for (i = 0; i < 13; i = i + 1) {
-        invaders.push(new Invader(x, y + 240));
-        x = x + 60;
-    }
-    x = 20;
-    for (i = 0; i < 13; i = i + 1) {
-        invaders.push(new Invader(x, y + 300));
-        x = x + 60;
+        if (invaders.length === 13) {
+            x = 20;
+            y = y + 60;
+        } else if (invaders.length === 26) {
+            x = 20;
+            y = y + 60;
+        } else if (invaders.length === 39) {
+            x = 20;
+            y = y + 60;
+        } else if (invaders.length === 52) {
+            x = 20;
+            y = y + 60;
+        } else if (invaders.length === 65) {
+            x = 20;
+            y = y + 60;
+        } else if (invaders.length === 78) {
+            x = 20;
+            y = y + 60;
+        }
     }
 }
 // Update Score //
 function updatescore() {
     'use strict';
-    document.getElementById('score').innerHTML = 'Score:' + score;
+    if (!shiphit) {
+        document.getElementById('score').innerHTML = 'Score:' + score;
+        if (invaders.length === 0) {
+            makeinvader();
+        }
+    } else {
+        return;
+    }
+
 }
 // Detect Collision //
 function detect() {
@@ -227,16 +230,29 @@ function detect() {
 // Move Invaders //
 function moveinvader() {
     'use strict';
-    var u;
+    var u,
+        movesound = new Audio('foosh.mp3');
+    movesound.play();
     for (u = 0; u < invaders.length; u = u + 1) {
         invaders[u].movepi();
+    }
+    if (!shiphit) {
+        setTimeout(moveinvader, 600);
+    } else {
+        document.getElementById('status').innerHTML = 'Game Over';
+        invaders = [];
+        return;
     }
 }
 // Draw Ship //
 function drawship() {
     'use strict';
-    ship.showpi();
-    window.requestAnimationFrame(drawship);
+    if (!shiphit) {
+        ship.showpi();
+        window.requestAnimationFrame(drawship);
+    } else {
+        return;
+    }
 }
 // Listen For KeyDown //
 function pressed(x) {
@@ -268,15 +284,17 @@ function pressed(x) {
         }
     }
     function firenow() {
-        soundfile.play();
-        bullets.push(new Bullet(ship.x, ship.y));
-        if (bullets.length === 1) {
-            // Execute Only Once //
-            if (change !== 1) {
-                drawbullet();
-                erasebullet();
-                detect();
-                change = 1;
+        if (!shiphit) {
+            soundfile.play();
+            bullets.push(new Bullet(ship.x, ship.y));
+            if (bullets.length === 1) {
+                // Execute Only Once //
+                if (change !== 1) {
+                    drawbullet();
+                    erasebullet();
+                    detect();
+                    change = 1;
+                }
             }
         }
     }
@@ -361,6 +379,26 @@ function unpressed(x) {
         }
     }
 }
+// Reset Function //
+function resetgame() {
+    'use strict';
+    location.reload(true);
+}
+// Check Invader Location//
+function invaderlocation() {
+    'use strict';
+    var i;
+    for (i = 0; i < invaders.length; i = i + 1) {
+        if (invaders[i].y > (ship.y - 70) && (ship.x > (invaders[i].x - 20)) && ship.x < (invaders[i].x + 40)) {
+            shiphit = true;
+        } else if (invaders[i].y > (ship.y - 40) && (ship.x > (invaders[i].x - 50)) && ship.x < (invaders[i].x + 70)) {
+            shiphit = true;
+        } else if (invaders[i].y > canvas.height - 80) {
+            shiphit = true;
+        }
+    }
+    window.requestAnimationFrame(invaderlocation);
+}
 // Detect KeyPress Events & Pass To Associated Functions //
 window.onkeydown = pressed;
 window.onkeyup = unpressed;
@@ -369,5 +407,6 @@ setCanvasWidth();
 paintover();
 drawship();
 makeinvader();
-//setInterval(moveinvader, 4000);
+moveinvader();
+invaderlocation();
 drawinvader();
