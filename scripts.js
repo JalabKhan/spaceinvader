@@ -1,4 +1,4 @@
-////  Author: JALAB KHAN  ////
+////  Developer: JALAB KHAN  ////
 // Setup Canvas, Variable, Booleans, Arrays //
 var canvas = document.querySelector("#make"),
     ctx = canvas.getContext("2d"),
@@ -11,6 +11,8 @@ var canvas = document.querySelector("#make"),
     pressedKeys = [],
     li,
     score = 0,
+    soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
+    movesound = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/foosh.mp3'),
     shiphit = false;
 // Get Random //
 function rand(min, max) {
@@ -230,8 +232,7 @@ function detect() {
 // Move Invaders //
 function moveinvader() {
     'use strict';
-    var u,
-        movesound = new Audio('foosh.mp3');
+    var u;
     movesound.play();
     for (u = 0; u < invaders.length; u = u + 1) {
         invaders[u].movepi();
@@ -263,8 +264,7 @@ function pressed(x) {
         moveright = 37,
         moveup = 38,
         movedown = 40,
-        i,
-        soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3');
+        i;
     li = pressedKeys[x.keyCode];
     if (!li) {
         if (code === spacebar) {
@@ -403,10 +403,13 @@ function invaderlocation() {
 window.onkeydown = pressed;
 window.onkeyup = unpressed;
 // Call Functions //
-setCanvasWidth();
-paintover();
-drawship();
-makeinvader();
-moveinvader();
-invaderlocation();
-drawinvader();
+setTimeout(function () {
+    'use strict';
+    setCanvasWidth();
+    paintover();
+    drawship();
+    makeinvader();
+    moveinvader();
+    invaderlocation();
+    drawinvader();
+}, 1000);
