@@ -1,5 +1,5 @@
 ////  Developer: JALAB KHAN  ////
-// Setup Canvas, Variable, Booleans, Arrays //
+// Setup Canvas, Variables, Booleans, Arrays //
 var canvas = document.querySelector("#make"),
     ctx = canvas.getContext("2d"),
     change,
@@ -238,7 +238,18 @@ function moveinvader() {
         invaders[u].movepi();
     }
     if (!shiphit) {
-        setTimeout(moveinvader, 600);
+        if (score > -1 && score < 77) {
+            setTimeout(moveinvader, 1500);
+        } else if (score >= 77 && score < 155) {
+            setTimeout(moveinvader, 1000);
+        } else if (score >= 155 && score < 232) {
+            setTimeout(moveinvader, 600);
+        } else if (score >= 232 && score < 309) {
+            setTimeout(moveinvader, 300);
+        } else if (score >= 309) {
+            setTimeout(moveinvader, 150);
+        }
+        
     } else {
         document.getElementById('status').innerHTML = 'Game Over';
         invaders = [];
