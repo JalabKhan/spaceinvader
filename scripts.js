@@ -11,8 +11,8 @@ var canvas = document.querySelector("#make"),
     pressedKeys = [],
     li,
     score = 0,
-    soundfile = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
-    movesound = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/foosh.mp3'),
+    fireaudio = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/blop.mp3'),
+    invaderaudio = new Audio('https://raw.githubusercontent.com/AlimasKuvo/spaceinvader/gh-pages/foosh.mp3'),
     shiphit = false;
 // Get Random //
 function rand(min, max) {
@@ -233,7 +233,7 @@ function detect() {
 function moveinvader() {
     'use strict';
     var u;
-    movesound.play();
+    invaderaudio.play();
     for (u = 0; u < invaders.length; u = u + 1) {
         invaders[u].movepi();
     }
@@ -285,7 +285,7 @@ function pressed(x) {
     }
     function firenow() {
         if (!shiphit) {
-            soundfile.play();
+            fireaudio.play();
             bullets.push(new Bullet(ship.x, ship.y));
             if (bullets.length === 1) {
                 // Execute Only Once //

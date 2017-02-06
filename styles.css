@@ -5,23 +5,28 @@ body{
     font-family: sans-serif;
     font-size: 20px;
     position: relative;
-    top:30;
+    top:10px;
 }
 #status{
     display: inline-block;
     font-family: sans-serif;
     font-size: 40px;
     position: relative;
-    top:10;
+    top:5px;
 }
 canvas {
     display: inline-block;
     position: relative;
     width: 100%;
     max-width: 500px;
-    height: 400px;
-    top: 20;
+    height: 100%;
+    max-height: 400px;
+    top: -15px;
     left: 0;
     z-index: -1;
     transform: scale(0.8);
+}
+button{
+    position: relative;
+    top: -50px;
 }
