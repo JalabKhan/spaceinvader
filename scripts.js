@@ -29,7 +29,7 @@ function Invader(x, y) {
     // Show Invader //
     this.showpi = function () {
         ctx.fillStyle = 'white';
-        ctx.fillRect(x, y, 40, 40);
+        ctx.fillRect(x, y, 20, 20);
     };
     // Move Invader //
     this.movepi = function () {
@@ -141,7 +141,7 @@ function paintover() {
 function erasebullet() {
     'use strict';
     if (bullets.length > 0) {
-        if (bullets[0].erasepi() < 40) {
+        if (bullets[0].erasepi() < 20) {
             bullets.shift();
         }
     }
@@ -216,8 +216,8 @@ function detect() {
         e;
     for (i = 0; i < bullets.length; i = i + 1) {
         for (e = 0; e < invaders.length; e = e + 1) {
-            if (bullets[i].y < (invaders[e].y + 80)) {
-                if ((bullets[i].x > (invaders[e].x - 10)) && bullets[i].x < (invaders[e].x + 30)) {
+            if (bullets[i].y < (invaders[e].y + 40)) {
+                if ((bullets[i].x > (invaders[e].x - 5)) && bullets[i].x < (invaders[e].x + 15)) {
                     bullets.splice(i, 1);
                     invaders.splice(e, 1);
                     score = score + 1;
