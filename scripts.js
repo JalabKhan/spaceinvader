@@ -209,7 +209,7 @@ function updatescore() {
     }
 
 }
-// Detect Collision //
+// Detect Collision of Invader with Bullet Only//
 function detect() {
     'use strict';
     var i,
@@ -395,7 +395,7 @@ function resetgame() {
     'use strict';
     location.reload(true);
 }
-// Check Invader Location//
+// Check Invader Location for Collision with Ship Only//
 function invaderlocation() {
     'use strict';
     var i;
