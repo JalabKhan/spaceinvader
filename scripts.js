@@ -26,9 +26,12 @@ function Invader(x, y) {
     this.x = x;
     this.y = y;
     this.clash = false;
+// Invader Color //
+	invadercolor = ['red', 'yellow', 'blue', 'green', 'purple'],
+	randominvadercolor = invadercolor[rand(0, 4)];
     // Show Invader //
     this.showpi = function () {
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = randominvadercolor;
         ctx.fillRect(x, y, 40, 40);
     };
     // Move Invader //
