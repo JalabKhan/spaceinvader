@@ -27,11 +27,11 @@ function Invader(x, y) {
     this.y = y;
     this.clash = false;
 // Invader Color //
-	invadercolor = ['red', 'yellow', 'blue', 'green', 'purple'],
-	randominvadercolor = invadercolor[rand(0, 4)];
+	var invadercolor = ['#DA0C81', '#FFF8C9', '#6499E9', '#79AC78', '#BC7AF9'],
+        randominvadercolor = invadercolor[rand(0, 4)];
     // Show Invader //
     this.showpi = function () {
-        ctx.fillStyle = 'yellow';
+        ctx.fillStyle = randominvadercolor;
         ctx.fillRect(x, y, 40, 40);
     };
     // Move Invader //
