@@ -31,7 +31,7 @@ function Invader(x, y) {
 	randominvadercolor = invadercolor[rand(0, 4)];
     // Show Invader //
     this.showpi = function () {
-        ctx.fillStyle = '#699bff';
+        ctx.fillStyle = 'yellow';
         ctx.fillRect(x, y, 40, 40);
     };
     // Move Invader //
